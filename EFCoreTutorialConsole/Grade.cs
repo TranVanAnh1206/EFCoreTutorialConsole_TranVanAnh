@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EFCoreTutorialConsole
 {
-    internal class Grade
+    public class Grade
     {
         public Grade()
         {
@@ -17,6 +17,6 @@ namespace EFCoreTutorialConsole
         public string GradeName { get; set; }
         public string Section { get; set; }
 
-        public IList<Student> Students { get; set; }
+        public ICollection<Student> Students { get; set; }
     }
 }

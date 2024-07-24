@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace EFCoreTutorialConsole
 {
-    internal class Course
+    public class Course
     {
         public int CourseId { get; set; }
         public string CourseName { get; set; }
+        public string Description { get; set; }
+
+        public ICollection<StudentCourse> StudentCourses { get; set; }
     }
 }

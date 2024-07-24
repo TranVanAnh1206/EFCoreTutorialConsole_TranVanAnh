@@ -9,10 +9,10 @@ namespace EFCoreTutorialConsole
         static void Main(string[] args)
         {
             //// Thêm cấu hình tệp appsettings.json
-            var configuration = new ConfigurationBuilder()
-                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .Build();
+            //var configuration = new ConfigurationBuilder()
+            //        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            //        .Build();
 
             using (var context = new SchoolDbContext())
             {
@@ -38,8 +38,8 @@ namespace EFCoreTutorialConsole
                     Console.WriteLine($"First Name: {s.FirstName}, Last Name: {s.LastName}");
                 }
 
-                var student = context.Students.FirstOrDefault();
-                DisplayStates(context.ChangeTracker.Entries());
+                //var student = context.Students.FirstOrDefault();
+                //DisplayStates(context.ChangeTracker.Entries());
 
                 //context.Students.Add(new Student() { FirstName = "Bill", LastName = "Gates" });
                 //DisplayStates(context.ChangeTracker.Entries());
@@ -61,8 +61,8 @@ namespace EFCoreTutorialConsole
                 //context.SaveChanges();
 
                 var std = new Student() { FirstName = "Bill", LastName = "Gate", Grade = grd1, Address = stdAddress };
-                context.Add<Student>(std);
-                context.SaveChanges();
+                //context.Add<Student>(std);
+                //context.SaveChanges();
 
 
                 // L2E

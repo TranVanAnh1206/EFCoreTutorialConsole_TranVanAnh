@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EFCoreTutorialConsole
+﻿namespace EFCoreTutorialConsole
 {
-    internal class Student
+    public class Student
     {
         public int StudentId { get; set; }
         public string FirstName { get; set; }
@@ -22,5 +15,7 @@ namespace EFCoreTutorialConsole
 
         public int StudentAddressId { get; set; }
         public StudentAddress Address { get; set; }
+
+        public ICollection<StudentCourse> StudentCourses { get; set; }
     }
 }
