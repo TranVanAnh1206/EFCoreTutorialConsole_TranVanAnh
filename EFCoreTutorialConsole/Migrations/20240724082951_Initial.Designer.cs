@@ -4,6 +4,7 @@ using EFCoreTutorialConsole;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFCoreTutorialConsole.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    partial class SchoolDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240724082951_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,10 +72,8 @@ namespace EFCoreTutorialConsole.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                    b.Property<int?>("AddressStudentAddressId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -95,15 +95,15 @@ namespace EFCoreTutorialConsole.Migrations
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                    b.Property<int>("StudentAddressId")
+                        .HasColumnType("int");
 
                     b.Property<float>("Weight")
                         .HasColumnType("real");
 
                     b.HasKey("StudentId");
+
+                    b.HasIndex("AddressStudentAddressId");
 
                     b.HasIndex("GradeId");
 
@@ -162,11 +162,17 @@ namespace EFCoreTutorialConsole.Migrations
 
             modelBuilder.Entity("EFCoreTutorialConsole.Student", b =>
                 {
+                    b.HasOne("EFCoreTutorialConsole.StudentAddress", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressStudentAddressId");
+
                     b.HasOne("EFCoreTutorialConsole.Grade", "Grade")
                         .WithMany("Students")
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Address");
 
                     b.Navigation("Grade");
                 });
@@ -174,9 +180,9 @@ namespace EFCoreTutorialConsole.Migrations
             modelBuilder.Entity("EFCoreTutorialConsole.StudentAddress", b =>
                 {
                     b.HasOne("EFCoreTutorialConsole.Student", "Student")
-                        .WithOne("Address")
+                        .WithOne()
                         .HasForeignKey("EFCoreTutorialConsole.StudentAddress", "AddressOfStudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Student");
@@ -213,8 +219,6 @@ namespace EFCoreTutorialConsole.Migrations
 
             modelBuilder.Entity("EFCoreTutorialConsole.Student", b =>
                 {
-                    b.Navigation("Address");
-
                     b.Navigation("StudentCourses");
                 });
 #pragma warning restore 612, 618

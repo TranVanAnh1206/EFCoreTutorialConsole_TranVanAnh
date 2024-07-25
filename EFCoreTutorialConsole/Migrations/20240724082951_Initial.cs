@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EFCoreTutorialConsole.Migrations
 {
-    public partial class InitDb : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,8 +29,8 @@ namespace EFCoreTutorialConsole.Migrations
                 {
                     GradeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GradeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Section = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    GradeName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Section = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,10 +43,10 @@ namespace EFCoreTutorialConsole.Migrations
                 {
                     StudentAddressId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     AddressOfStudentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -58,20 +58,21 @@ namespace EFCoreTutorialConsole.Migrations
                 name: "Students",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Weight = table.Column<float>(type: "real", nullable: false),
                     GradeId = table.Column<int>(type: "int", nullable: false),
                     StudentAddressId = table.Column<int>(type: "int", nullable: false),
-                    AddressStudentAddressId = table.Column<int>(type: "int", nullable: false)
+                    AddressStudentAddressId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.PrimaryKey("PK_Students", x => x.StudentId);
                     table.ForeignKey(
                         name: "FK_Students_Grades_GradeId",
                         column: x => x.GradeId,
@@ -82,8 +83,7 @@ namespace EFCoreTutorialConsole.Migrations
                         name: "FK_Students_StudentAddresses_AddressStudentAddressId",
                         column: x => x.AddressStudentAddressId,
                         principalTable: "StudentAddresses",
-                        principalColumn: "StudentAddressId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "StudentAddressId");
                 });
 
             migrationBuilder.CreateTable(
@@ -106,7 +106,7 @@ namespace EFCoreTutorialConsole.Migrations
                         name: "FK_StudentCourse_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
-                        principalColumn: "Id",
+                        principalColumn: "StudentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -136,7 +136,7 @@ namespace EFCoreTutorialConsole.Migrations
                 table: "StudentAddresses",
                 column: "AddressOfStudentId",
                 principalTable: "Students",
-                principalColumn: "Id",
+                principalColumn: "StudentId",
                 onDelete: ReferentialAction.Restrict);
         }
 

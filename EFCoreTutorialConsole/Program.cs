@@ -19,23 +19,34 @@ namespace EFCoreTutorialConsole
                 context.Database.EnsureCreated();
 
                 ////create entity objects
-                var grd1 = new Grade() { GradeName = "1st Grade" };
-                var stdAddress = new StudentAddress()
-                {
-                    City = "SFO",
-                    State = "CA",
-                    Country = "USA"
-                };
+                var grd1 = new Grade() { GradeName = "1st Grade 312312" };
 
-                var std1 = new Student() { FirstName = "Yash", LastName = "Malhotra", Grade = grd1, Address = stdAddress };
+                var std1 = new Student() { FirstName = "Yash 12312313113", LastName = "Malhotra 23123123", Grade = grd1 };
 
-                //add entitiy to the context
+                ////add entitiy to the context
                 context.Students.Add(std1);
                 context.SaveChanges();
 
+                var stdAddress = new StudentAddress()
+                {
+                    Address = "SFO - CA - USA",
+                    City = "SFO",
+                    State = "CA",
+                    Country = "USA",
+                    Student = std1
+                };
+                context.StudentAddresses.Add(stdAddress);
+                context.SaveChanges();
+
+                //// Demo về DeleteBehavior.Cascade
+                //var grade = context.Grades.Find(7);
+                //context.Grades.Remove(grade);
+                //context.SaveChanges();
+
                 foreach (var s in context.Students)
                 {
-                    Console.WriteLine($"First Name: {s.FirstName}, Last Name: {s.LastName}");
+                    var createdDate = context.Entry(s).Property("CreatedDate").CurrentValue;
+                    Console.WriteLine($"First Name: {s.FirstName}, Last Name: {s.LastName}, Created date: {createdDate}");
                 }
 
                 //var student = context.Students.FirstOrDefault();
@@ -60,7 +71,7 @@ namespace EFCoreTutorialConsole
                 //context.Students.Remove(std);
                 //context.SaveChanges();
 
-                var std = new Student() { FirstName = "Bill", LastName = "Gate", Grade = grd1, Address = stdAddress };
+                //var std = new Student() { FirstName = "Bill", LastName = "Gate", Grade = grd1, Address = stdAddress };
                 //context.Add<Student>(std);
                 //context.SaveChanges();
 
@@ -69,11 +80,6 @@ namespace EFCoreTutorialConsole
                 var studentsWithSameName = context.Students
                                       .Where(s => s.FirstName == "Steve")
                                       .ToList();
-
-                foreach (var s in studentsWithSameName)
-                {
-                    Console.WriteLine($"First Name: {s.FirstName}, Last Name: {s.LastName}");
-                }
 
                 var studentWithGrade = context.Students
                                            .Where(s => s.FirstName == "Steve")

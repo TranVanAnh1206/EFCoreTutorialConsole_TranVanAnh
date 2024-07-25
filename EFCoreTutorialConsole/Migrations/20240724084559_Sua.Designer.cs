@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFCoreTutorialConsole.Migrations
 {
     [DbContext(typeof(SchoolDbContext))]
-    [Migration("20240724032229_InitDb")]
-    partial class InitDb
+    [Migration("20240724084559_Sua")]
+    partial class Sua
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,11 +54,9 @@ namespace EFCoreTutorialConsole.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GradeId"), 1L, 1);
 
                     b.Property<string>("GradeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Section")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GradeId");
@@ -70,19 +68,16 @@ namespace EFCoreTutorialConsole.Migrations
                 {
                     b.Property<int>("StudentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0)
-                        .HasColumnName("Id");
-
-                    b.Property<int>("AddressStudentAddressId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"), 1L, 1);
+
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("GradeId")
                         .HasColumnType("int");
@@ -91,11 +86,10 @@ namespace EFCoreTutorialConsole.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("Photo")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int>("StudentAddressId")
@@ -105,8 +99,6 @@ namespace EFCoreTutorialConsole.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("StudentId");
-
-                    b.HasIndex("AddressStudentAddressId");
 
                     b.HasIndex("GradeId");
 
@@ -122,23 +114,23 @@ namespace EFCoreTutorialConsole.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentAddressId"), 1L, 1);
 
                     b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("AddressOfStudentId")
                         .HasColumnType("int");
 
                     b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("StudentAddressId");
 
@@ -165,19 +157,11 @@ namespace EFCoreTutorialConsole.Migrations
 
             modelBuilder.Entity("EFCoreTutorialConsole.Student", b =>
                 {
-                    b.HasOne("EFCoreTutorialConsole.StudentAddress", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressStudentAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("EFCoreTutorialConsole.Grade", "Grade")
                         .WithMany("Students")
                         .HasForeignKey("GradeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Address");
 
                     b.Navigation("Grade");
                 });
@@ -185,9 +169,9 @@ namespace EFCoreTutorialConsole.Migrations
             modelBuilder.Entity("EFCoreTutorialConsole.StudentAddress", b =>
                 {
                     b.HasOne("EFCoreTutorialConsole.Student", "Student")
-                        .WithOne()
+                        .WithOne("Address")
                         .HasForeignKey("EFCoreTutorialConsole.StudentAddress", "AddressOfStudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Student");
@@ -224,6 +208,8 @@ namespace EFCoreTutorialConsole.Migrations
 
             modelBuilder.Entity("EFCoreTutorialConsole.Student", b =>
                 {
+                    b.Navigation("Address");
+
                     b.Navigation("StudentCourses");
                 });
 #pragma warning restore 612, 618
